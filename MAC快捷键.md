@@ -20,7 +20,7 @@
 | 终端拆分     | Command + D              |
 | 终端取消拆分   | Command + Shift + D      |
 | 链接服务器    | Command + K              |
-|          |                          |
+| fdsfd    | dsds                     |
 |          |                          |
 |          |                          |
 |          |                          |
