@@ -78,6 +78,7 @@
   	-d, 后台运行
   	-p, 端口映射，5000:50000
   	-v, 文件挂载，/宿主机地址:/容器地址
+  	--privileged=true, 获取宿主机所有权限
   	
   docker run -d -p 5000:5000 -v /Users/caojunming/registry/:/tmp/registry registry
   ```
@@ -129,7 +130,169 @@
 
   ```shell
   docker rmi $(docker images -f "dangling=true" -q)
+  docker image prune
   ```
 
-  ​
 
+
+
+
+
+# Docker-machine
+
+- ##### 创建本地主机实例
+
+  ```shell
+  docker-machine create -d xhyve --xhyve-boot2docker-url /Users/caojunming/.docker/machine/cache/boot2docker.iso edwin
+  ```
+
+- ##### 登录目标主机
+
+  ```shell
+  docker-machine ssh edwin
+  ```
+
+- ##### 显示连接到某个主机需要的环境变量
+
+  ```shell
+  docker-machine env edwin
+  ```
+
+- ##### 初始化集群
+
+  ```shell
+  docker swarm init
+  ```
+
+- ##### 查看加入集群命令
+
+  ```shell
+  docker swarm join-token worker
+  ```
+
+- ##### 查看集群
+
+  ```shell
+  docker node ls
+  ```
+
+- ##### 取消集群
+
+  ```shell
+  docker swarm leave --force
+  ```
+
+- ##### 创建服务
+
+  ```shell
+  docker service create --replicas 3 -p 80:80 --name nginx nginx:1.13.7-alpine
+  ```
+
+- ##### 查看全部服务
+
+  ```shell
+  docker service ls
+  ```
+
+- ##### 查看服务详情
+
+  ```shell
+  docker service ps tomcat
+  ```
+
+- ##### 查看服务日志
+
+  ```shell
+  docker service logs tomcat
+  ```
+
+- ##### 删除服务
+
+  ```shell
+  docker service rm tomcat
+  ```
+
+- ##### 
+
+
+
+
+
+
+# Dockerfile
+
+- #### FROM：指定基础镜像
+
+  ```dockerfile
+  #空镜像
+  FROM scratch
+  ```
+
+
+- #### RUN：执行命令
+
+  - ##### shell格式
+
+    ```dockerfile
+    #RUN <shell命令>
+    RUN echo '<h1>Hello, Docker!</h1>' > /usr/share/nginx/html/index.html
+    ```
+
+  - ##### exec格式
+
+    ```dockerfile
+    #RUN ["可执行文件", "参数1", "参数2"]
+    RUN ["sh", "c", "java -jar app.jar"]
+    ```
+
+  ```dockerfile
+  FROM debian:jessie
+
+  RUN buildDeps='gcc libc6-dev make' \
+      && apt-get update \
+      && apt-get install -y $buildDeps \
+      && wget -O redis.tar.gz "http://download.redis.io/releases/redis-3.2.5.tar.gz" \
+      && mkdir -p /usr/src/redis \
+      && tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1 \
+      && make -C /usr/src/redis \
+      && make -C /usr/src/redis install \
+      && rm -rf /var/lib/apt/lists/* \
+      && rm redis.tar.gz \
+      && rm -r /usr/src/redis \
+      && apt-get purge -y --auto-remove $buildDeps
+  ```
+
+- #### COPY：复制文件
+
+  - ##### shell格式
+
+    ```dockerfile
+    #COPY <源路径[宿主机]> <目标路径[容器]>
+    COPY xxx.jar /usr/src/app/
+    ```
+
+  - ##### exec格式
+
+    ```dockerfile
+    #COPY ["<源路径1>",... "<目标路径>"]
+    ```
+
+- #### ADD：自动解压的复制文件
+
+- #### CMD：容器启动命令
+
+  - ##### shell格式
+
+    ```dockerfile
+    #CMD <shell命令>
+    CMD echo $HOME
+    ```
+
+  - ##### exec格式
+
+    ```dockerfile
+    #CMD ["可执行文件", "参数1", "参数2"...]
+    CMD ["sh", "-c", "echo $HOME"]
+    ```
+
+- #### 
