@@ -50,12 +50,15 @@
 | 优化import   | Ctrl + Option + O       |
 | 大小写切换      | Shift + Command + U     |
 | 高亮显示文本     | Shift + Command + F7    |
+| 查看哪些地方使用   | Option + F7             |
+| 重命名        | Shift + F6              |
 | 结束当前行并自动加; | Shift + Command + Enter |
 | 切换到下一行     | Shift + Enter           |
 | 重写父类方法     | Ctrl + O                |
 | 实现父接口方法    | Ctrl + I                |
 | 重启服务       | Command + R             |
 | 生成get方法等   | Command + N             |
-|            |                         |
-|            |                         |
+| 生成         |                         |
+| 自动导入包      | Option + Enter          |
+| 当前文件中查找方法  | Command + F12           |
 |            |                         |
